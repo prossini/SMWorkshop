@@ -6,10 +6,10 @@ output:
   html_document:
     toc: false
 
-#knit: (function(input_file, encoding) {
- #  rmarkdown::render(input_file,
- #encoding=encoding,
-# output_file=file.path(dirname(input_file), 'index.html'))})
+knit: (function(input_file, encoding) {
+  rmarkdown::render(input_file,
+  encoding=encoding,
+  output_file=file.path(dirname(input_file), 'index.html'))})
 
 
 ---
