@@ -15,6 +15,33 @@ knit: (function(input_file, encoding) {
 ---
 
 
+
+## Course Description & Goals
+
+Social media is now a ubiquitous part of everyday life. People are routinely using social media to communicate with friends and family, follow the latest news, and to participate in politics. As a consequence, researchers have been increasingly interested in understanding the use, nature and effects of social media in everyday life. The scholarly interest on social media use gives rise to a need to think carefully about ethical considerations and methods for studying these channels, as well as the limitations of this type of research.
+
+This workshop focuses on social media research methods and overviews methods for collecting and analyzing data from social media platforms. It also discusses the implications and limitations – both technical and ethical – of conducting research on social media. The workshop will cover both the theoretical foundations of social media research and the practical skills for collecting and analyzing data.
+
+This course is meant for any student with an interest in researching human behavior on and around social media platforms. A computer with RStudio installed is required.
+
+
+
+#### Course Goals
+
+   - Explore ethical considerations of online research
+   - Examine the unique challenges and opportunities of research involving social media use.
+   - Learn methodological techniques for social media research
+   - Learn techniques for data collection, cleaning and basic analysis
+
+#### Course Outcomes
+
+  - Understand the ethical considerations unique to social media research methods
+  - Understand the relationship between research questions, methods, and available data
+  - Articulate strengths and weaknesses of methodological approaches
+  - Learn how to collect publicly accessible social media data using R
+  - Learn techniques to clean, visualize and analyze social media data using R
+
+
 ## Introduction & App setup
 
 In this workshop, we are going to use R to collect data from social media APIs. 
@@ -42,7 +69,7 @@ If your R installation is old and hasn't been updated in a while, you might get 
 Note: R always wipes away all packages when you install a new version, so update R first, install packages second. 
 
 
-### A note about Twitter data:
+#### A note about Twitter data:
 
 Twitter is among the easiest/most open social media platforms to collect data from. You can get data from Twitter using the API (application programming interface), which require creating a [developers account](http://dev.twitter.com). 
 
@@ -59,6 +86,15 @@ A free developer account gives you essential access to Twitter data, with a limi
 
 If you decide to use Twitter data for your dissertation, you can also apply for [academic access](https://developer.twitter.com/en/products/twitter-api/academic-research), which can give you access to 10 million tweets per month for free. A caveat is that the Academic access uses Twitter's V2 API, which requires a different package in R,  [academictwitteR](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html).
 
+#### A note about social media research ethics: 
+
+In our first session, we will discuss some ethical considerations of doing research online, collecting social media data, and navigating what is public and what is private when doing this type of research. In my experience, UK institutions treat 'social media data' in very different ways when it comes to ethical concerns, to the point that there is no 'gold standard' of dos and dont's. To get us started on this conversation, make sure to read the Ethics Guidelines put together by the [Association of Internet Researchers (AoIR)](https://aoir.org/ire30/)
+
+Also, you might find this paper interesting as we discuss the (lack of) access to Facebook data. 
+- Bruns, A. (2019). After the ‘APIcalypse’: Social media platforms and their fight against critical scholarly research. Information, Communication & Society, 0(0), 1–23. https://doi.org/10.1080/1369118X.2019.1637447 
+
+That is all for now. Please email me if you have any questions or issues!
 
 
+#### To be continued...
 
