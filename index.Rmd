@@ -1,5 +1,5 @@
 ---
-title: "Social Media Analysis Workshop"
+title: "Social Media Data Collection & Analysis Workshop"
 author: "Dr Patricia Rossini, University of Glasgow"
 date: "June, 2022, University of Leeds"
 output: 
