@@ -1,0 +1,299 @@
+---
+title: "Week 9 Collecting Twitter Data With R"
+author: "Patricia Rossini, University of Liverpool"
+date: "November 22, 2021"
+output: 
+  html_document:
+    toc: true
+
+knit: (function(input_file, encoding) {
+   rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), 'week9.html'))})
+
+
+---
+```{r setup, include=FALSE, eval=TRUE}
+knitr::opts_chunk$set(include = FALSE)
+require("knitr")
+library(rtweet)
+opts_knit$set(root.dir = "~/Documents/GitHub/Research_Methods_UoL/")
+chooseCRANmirror(graphics=FALSE, ind=1)
+
+
+load("~/R/tweet-collections-credentialsR.RData")
+load("~/Documents/GitHub/Research_Methods_UoL/leaders_tweets.RData") # here we are loading the data you saved
+load("~/Documents/GitHub/Research_Methods_UoL/COP26_tweets_16112021.RData") # here we are loading the data you saved
+
+token <- create_token(
+  app = app_name, #your app name
+  consumer_key = app_key, #consumer key for your app, replace the text between quotes with your app's key 
+  consumer_secret = app_secret)
+```
+
+
+## Introduction 
+
+Welcome to week 9 of our Research Methods in Media and Politics module. 
+
+This week, we are going to use R to collect data from Twitter. 
+You should have already created a developer account with essential access and set up one application.
+
+From your [developer's dashboard on Twitter](https://developer.twitter.com/en/portal/dashboard), go to your new application, click on the 'gear' symbol to go to app settings, then click on keys and tokens and generate (or regenerate) the consumer keys. 
+Copy the app secret and app key to a word file. You will always need them to connect with the Twitter API.
+
+
+
+### Installing packages
+First things first: open RStudio and install all the packages we will need for this course running the following code:
+
+```{r installing packages, message=FALSE, eval=FALSE }
+install.packages("descr", "rtweet", "tidyverse", "tidytext", "glue", "stringr", "wordcloud", "lubridate")
+```
+
+
+As you already know, it is good practice to call your packages in the beginning of your script by using the library command. You may also want to set your work directory and a few options, such as removing scientific notations.
+
+
+```{r calling packages,  message=FALSE}
+# options
+options(scipen=999, digits = 4)
+# call required packages
+library(rtweet)
+library(tidyverse)
+library(lubridate)
+library(glue)
+library(descr)
+library(stringr)
+```
+
+
+
+
+## Collecting Twitter Data:
+
+Twitter is among the easiest/most open social media platforms to collect data from. You can get data from Twitter using the API (application programming interface), which require creating a [developers account](http://dev.twitter.com). 
+
+After your account is ready, create a project and an app. 
+
+There are several R packages that interact with Twitter's API. We will use rtweet, by [Michael Kearney](https://rtweet.info/articles/intro.html), which can query both the REST and the stream APIs.
+
+Now, you need to authenticate with Twitter using the credentials you created for your app:
+
+```{r twitter oauth, eval=FALSE, include=TRUE}
+
+
+## paste use your credentials here. 
+
+## Create a token
+token <- create_token(
+  app = 'app_name', #your app name 
+  consumer_key = "consumerKey", #consumer key for your app, replace the text between quotes with your app's key 
+  consumer_secret = 'consumerSecret') #consumer secret for your app, replace the text between quotes with your app's secret 
+
+```
+
+There are different types of Twitter data you can collect. 
+
+For the purposes of this workshop and the hands-on work we do here, we will focus a bit more on the REST API, which collects tweets from a timeline (up to 3200) and from a search (of hashtags, keywords etc), as well as networks of users -- e.g. followers / followed accounts.
+
+Your free developer account gives you essential access to Twitter data, with a limit of 500,000 tweets per month. If you decide to use Twitter data for your dissertation, you can also apply for [https://developer.twitter.com/en/products/twitter-api/academic-research](academic access), which can give you access to 10 million tweets per month for free. 
+
+
+### Timeline Search
+
+
+Let's begin with timeline searches, that is, retrieving up to 3200 tweets from a single (or multiple) public accounts. 
+You would use these commands to collect the content of tweets by an account, including data about engagement (likes, retweets).
+For instance, let's compare tweets by Boris Johnson & the Conservative party vs tweets by Keir Starmer & Labour
+
+
+```{r search API, eval=FALSE, include=TRUE}
+
+## getting tweets from one user and assigning them to an object named 'Boris'
+## 
+boris <- get_timeline("BorisJohnson", n=3200, retryOnRateLimit=120, resultType = "recent")
+
+
+## getting tweets from several users and assigning them to a single object named 'leaders'
+leaders <- get_timelines(c("BorisJohnson", "Keir_Starmer", "Conservatives", "UKLabour") , n=3200, retryOnRateLimit=120, resultType = "recent")
+
+# if we want to save this data to work on it later, just use the following command: 
+save(leaders, file = "leaders_tweets_16112021.RData") # to save it as an R object OR
+write_as_csv(leaders, file_name = "leaders_tweets_16112021.csv") # to save as a CSV that can be opened in excel. This function is from the package rtweet, not the same as 'write.csv' from base R. 
+
+``` 
+
+Note that I added the date I collected the data to the filename before saving. This is just for 'housekeeping': it is easier to remember when you created a data collection if you keep track of dates in filenames.
+
+
+Now we have a dataframe with 90 variables and over 12,000 Tweets from the four accounts.  
+As you learned before, the first step is to inspect our data by looking at the column names:
+
+```{r checking the df, eval=FALSE}
+colnames(leaders)
+```
+
+
+With this command, we can see the different columns in our dataframe. We have engagement data (e.g. likes, retweets), data about devices used to tweet, geolocation etc. You can check Twitter's [documentation](https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet) to see what each of these columns mean if you are curious. Unlike our survey datasets, however, it is a bit easier to guess what each column contains by looking at the column name.
+
+
+We can also view our dataframe in RStudio by clickong on it in the Environment tab, or inspect the first few columns using: 
+
+
+```{r inspect, echo=TRUE, eval=FALSE}
+
+head(leaders)
+
+```
+
+We downloaded tweets from four different accounts, so it is useful to inspect the data. 
+Let's look at how many tweets we have per account. It also makes sense to check the earliest date of each account's tweets so that we can filter our data afterwards to make sure we are comparing accounts in the same period of time. 
+
+
+```{r}
+
+freq(leaders$screen_name) # unsurprisingly, we have about 3200 for all accounts, as this is the maximum we can retrieve using the free API
+
+#let's check the dates. 
+#First we convert the date column to a 'date' object using the function as.Date:
+leaders$created_at <- as.Date(leaders$created_at)
+
+#then, we check the earliest and latest tweet date per account:
+leaders %>% group_by(screen_name) %>% summarise(min(created_at), max(created_at))
+
+# from this we notice that tweets by Boris Johnson go way back to July, 2019, but all others were some time in 2020. 
+# To make our dataset comparable, let's limit the analysis to tweets posted in 2021, filtering by date. 
+# I will assign the filtered dataset to a new object just in case we want to return to the full set some other time. 
+
+leaders_analysis <- leaders %>% filter(created_at >= '2021-01-01') #now our new data has 7040 tweets. Let's check again the dates to make sure it looks correct: 
+leaders_analysis %>% group_by(screen_name) %>% summarise(min(created_at), max(created_at)) # great, now all our accounts have tweets for the same period of time! 
+
+```
+
+
+This first part was about inspecting the data and understanding what we collected, as well as filtering data by the created date to narrow down our tweets to 2021. 
+
+Thinking about what you learned in weeks 5-6, we could look into basic descriptive statistics to further compare and analyse these accounts. 
+For instance, let's look at the means for engagement metrics: 
+
+
+```{r means}
+
+
+````
+
+### Hashtags and searching terms
+
+
+Now, a different type of data we can get is a sample of tweets about a topic or hashtag, using search terms and search operators. You can learn more about which different [search operators](https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators) can be used on Twitter. 
+
+In this example, let's make a simple search to collect tweets using the hashtag #COP26.
+
+Bear in mind this is a sample of tweets (capped at 1% of all tweets at the moment of the query) and we don't have a way to know the 'population'--that is, how many people were actually using this hashtag at any given time. As such, any analysis or results would have to account for the limitation of using a sample of an unkrnown population. 
+
+
+```{r search tweets, include=TRUE, eval=FALSE, inspect=FALSE}
+COP26 <- search_tweets(
+  "#cop26",include_rts = FALSE, retryonratelimit = TRUE) # here we are asking the API for tweets using this hashtag, excluding RTs
+
+
+save(COP26, file = "COP26_tweets_16112021.RData") # to save it as an R object OR
+write_as_csv(COP26, file_name = "leaders_tweets_16112021.csv") # to save as a CSV that can be opened in excel. This function is from the package rtweet, 
+```
+
+
+If we inspect this dataset (using colnames, or clicking on the environment), you will see that here we have tweets by many different accounts that used the hashtag #COP26. 
+
+
+
+## Data Analysis
+
+
+There are different analytic techniques you can use to study twitter data depending on your research interests. To study the content of tweets, you could use manual content analysis (as you learned in Week 8) for instance to study how a newspaper or a politician talk about something on twitter or even more generally assess their overall communication strategies. In this workshop, we are only covering a few possibilities to give you an idea of research projects using Twitter data. 
+
+
+If you want to keep learning R and use Twitter data in your dissertation, you can also explore more automated techniques that we will not to cover in the module. 
+
+For instance, you could use textual mining and analysis techniques if you want to find which words are more frequently associated with a particular hashtag. You can also consider network analysis techniques if you want to study relationships between accounts. There are several online tutorials that will teach you how to implement these techniques on tweets using R. Just use Google :) 
+
+
+
+
+### Engagement: comparing mean per account
+
+Let's bring together what you learned in weeks 5 & 6 with your newly acquired data collection skills.
+We collected a dataset that contains tweets from party and leader accounts for the two main political parties in the UK--
+
+
+
+### Time Series
+
+Time series are useful to understand data patterns over time. This can help you compare how much different accounts tweet over time, or investigate tweets (or engagements) over a period of time. The main point of a time series plot is to show trends over a certain period of time.
+
+
+For instance, considering the leaders dataset we collected, we can plot the four accounts' Twitter activity in 2021 to answer basic research questions such as 1) were parties or leaders more active on twitter in 2021? or 2)  
+
+```{r, include=TRUE}
+load("~/Documents/GitHub/Research_Methods_UoL/leaders_tweets.RData") # here we are loading the data you saved
+
+leaders %>%
+  group_by(screen_name) %>% 
+  filter(created_at >= "2021-01-01 00:00:00") %>% 
+  rtweet::ts_plot("weeks", trim = 2L) +
+  geom_abline() +
+  theme_classic() +
+  scale_x_datetime(date_labels = "%b %d", breaks = "2 week") +
+  scale_color_brewer(type = "qual", palette = 2) +
+  ggplot2::theme(
+    legend.title = ggplot2::element_blank(),
+    legend.position = "bottom",
+    plot.title = ggplot2::element_text(face = "bold")) +
+  ggplot2::labs(
+    x = NULL, y = NULL,
+    title = "@BorisJohnson, @Conservatives, @Keir_Starmer and @Labour on Twitter, 2021",
+    subtitle = "Aggregated by 2 weeks")  + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+You can tweak your plot changing the colors, breaks (hours, days, weeks...), the type of the plot, the theme etc. Check [ggplot2](https://ggplot2.tidyverse.org/reference/) reference to learn more about these options. 
+
+
+
+
+
+
+
+## Hands-on exercise
+
+```{r eval=FALSE, include=TRUE, eval=FALSE}
+tabloids <- get_timelines(c("MailOnline", "Daily_Express", "DailyMirror", "dailystar") , n=3200, retryOnRateLimit=120, resultType = "recent") 
+
+
+# let's check the frequency for each twitter handle
+freq(tabloids$screen_name)
+
+#and inspect the column names (so we know what we have)
+colnames(tabloids)
+
+#we can filter the results and store them to a new dataframe based on parameters such as the date of the tweeet
+tabloids2021 <- filter(tabloids, created_at >= "2021-01-01 00:00:00") # gets tweets in 2019
+
+# selecting the variables we are interested in and recording them to a new dataframe (useful for large datasets) - needs dplyr to be loaded:
+
+tabloids2021_engagement <- select(tabloids2021, screen_name, favorite_count, retweet_count, reply_count, is_retweet, hashtags, media_type)
+
+# inspecting the dataset to see the values in the subcategories of interest
+freq(tabloids2021_engagement$screen_name)
+tabloids2021_engagement$media_type <- unlist(tabloids2021_engagement$media_type)
+tabloids2021_engagement$hashtags <- unlist(tabloids2021_engagement$hashtags)
+
+freq(tabloids2021_engagement$media_type)
+freq(tabloids2021_engagement$hashtags)
+
+```
+
+
+
+# Don't forget!
+
+There are many other things you could do, such as getting a list of followers and followed accounts by a specific account. This workshop only focused on getting tweets based on accounts and hashtags as these are the most likely use-cases for your own dissertations, but you can find many more use cases by looking at the [documentation for RTweet](https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html)

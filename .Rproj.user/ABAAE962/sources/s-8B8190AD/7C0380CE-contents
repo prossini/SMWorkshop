@@ -1,0 +1,5 @@
+# Twitter app 'tweet-collections-R'
+app_key <- "vCNeg272fEMh1MY2iw9AQKUq2"
+app_secret <- 'OvgFaiuK5WuI6FBbILQUOD4LBHnOZPLpWCYgKt6nB9efy2jdwf'
+app_name <- 'tweet-collections-R'
+save(app_secret, app_key, app_name, file = "R/tweet-collections-credentialsR.RData")

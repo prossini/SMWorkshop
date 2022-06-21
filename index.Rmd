@@ -1,0 +1,64 @@
+---
+title: "Social Media Analysis Workshop"
+author: "Dr Patricia Rossini, University of Glasgow"
+date: "June, 2022, University of Leeds"
+output: 
+  html_document:
+    toc: true
+
+knit: (function(input_file, encoding) {
+   rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), 'index.html'))})
+
+
+---
+
+
+## Introduction & App setup
+
+In this workshop, we are going to use R to collect data from social media APIs. 
+You should have already created a developer account. From your [developer's dashboard on Twitter](https://developer.twitter.com/en/portal/dashboard), with elevated access, create one application. Then you will get your access keys: copy and paste the app key, app secret and bearer token on a word/text document as we will need them to connect to Twitter using R. 
+
+Then, you need to edit the authentication method. Click on your new app and go down to 'user authentication settings' in the settings tab. 
+Click on 'edit' and select OAuth 1.0a (you may also see OAuth 2.0, ignore it). 
+
+Set the permissions to 'read, write', and the 'Callback URL' to "http://127.0.0.1:1410". Save & done with this part!
+
+
+
+### RStudio: installing packages
+
+First things first: open RStudio and install all the packages we will need for this course running the following code (i.e., paste in the 'terminal' and press enter).
+
+```{r installing packages, message=FALSE, eval=FALSE }
+install.packages("descr", "rtweet", "tidyverse", "tidytext", "glue", "stringr", "wordcloud", "lubridate", "httr", "httpuv" )
+```
+
+
+R might ask you questions while installing these--you can say yes to all of them. 
+If your R installation is old and hasn't been updated in a while, you might get errors when trying to install some of these. In that case, update R first and then install packages. 
+
+Note: R always wipes away all packages when you install a new version, so update R first, install packages second. 
+
+
+### A note about Twitter data:
+
+Twitter is among the easiest/most open social media platforms to collect data from. You can get data from Twitter using the API (application programming interface), which require creating a [developers account](http://dev.twitter.com). 
+
+There are several R packages that interact with Twitter's API. We will use rtweet, by [Michael Kearney](https://rtweet.info/articles/intro.html), which can query both the REST and the stream APIs.
+
+
+There are different types of Twitter data you can collect. 
+
+
+For the purposes of this workshop and the hands-on work we do here, we will focus a bit more on the REST API, which collects tweets from a timeline (up to 3200) and from a search (of hashtags, keywords etc), as well as networks of users -- e.g. followers / followed accounts.
+
+
+A free developer account gives you essential access to Twitter data, with a limit of 500,000 tweets per month. Elevated access allows you to get 2 million tweets/month, which is likely enough for most uses. 
+
+If you decide to use Twitter data for your dissertation, you can also apply for [academic access](https://developer.twitter.com/en/products/twitter-api/academic-research), which can give you access to 10 million tweets per month for free. A caveat is that the Academic access uses Twitter's V2 API, which requires a different package in R,  [academictwitteR](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html).
+
+
+
+
