@@ -6,53 +6,42 @@ output:
   html_document:
     toc: false
 
-knit: (function(input_file, encoding) {
-  rmarkdown::render(input_file,
-  encoding=encoding,
-  output_file=file.path(dirname(input_file), 'index.html'))})
-
-
+#knit: (function(input_file, encoding) {
+#  rmarkdown::render(input_file,
+#  encoding=encoding,
+#  output_file=file.path(dirname(input_file), 'index.html'))})
 ---
-
-
 
 ## Course Description & Goals
 
 Social media is now a ubiquitous part of everyday life. People are routinely using social media to communicate with friends and family, follow the latest news, and to participate in politics. As a consequence, researchers have been increasingly interested in understanding the use, nature and effects of social media in everyday life. The scholarly interest on social media use gives rise to a need to think carefully about ethical considerations and methods for studying these channels, as well as the limitations of this type of research.
 
-This workshop focuses on social media research methods and overviews methods for collecting and analyzing data from social media platforms. It also discusses the implications and limitations – both technical and ethical – of conducting research on social media. The workshop will cover both the theoretical foundations of social media research and the practical skills for collecting and analyzing data.
+This workshop focuses on social media research methods and overviews methods for collecting and analyzing data from social media platforms. It also discusses the implications and limitations -- both technical and ethical -- of conducting research on social media. The workshop will cover both the theoretical foundations of social media research and the practical skills for collecting and analyzing data.
 
 This course is meant for any student with an interest in researching human behavior on and around social media platforms. A computer with RStudio installed is required.
 
-
-
 #### Course Goals
 
-   - Explore ethical considerations of online research
-   - Examine the unique challenges and opportunities of research involving social media use.
-   - Learn methodological techniques for social media research
-   - Learn techniques for data collection, cleaning and basic analysis
+-   Explore ethical considerations of online research
+-   Examine the unique challenges and opportunities of research involving social media use.
+-   Learn methodological techniques for social media research
+-   Learn techniques for data collection, cleaning and basic analysis
 
 #### Course Outcomes
 
-  - Understand the ethical considerations unique to social media research methods
-  - Understand the relationship between research questions, methods, and available data
-  - Articulate strengths and weaknesses of methodological approaches
-  - Learn how to collect publicly accessible social media data using R
-  - Learn techniques to clean, visualize and analyze social media data using R
-
+-   Understand the ethical considerations unique to social media research methods
+-   Understand the relationship between research questions, methods, and available data
+-   Articulate strengths and weaknesses of methodological approaches
+-   Learn how to collect publicly accessible social media data using R
+-   Learn techniques to clean, visualize and analyze social media data using R
 
 ## Introduction & App setup
 
-In this workshop, we are going to use R to collect data from social media APIs. 
-You should have already created a developer account. From your [developer's dashboard on Twitter](https://developer.twitter.com/en/portal/dashboard), with elevated access, create one application. Then you will get your access keys: copy and paste the app key, app secret and bearer token on a word/text document as we will need them to connect to Twitter using R. 
+In this workshop, we are going to use R to collect data from social media APIs. You should have already created a developer account. From your [developer's dashboard on Twitter](https://developer.twitter.com/en/portal/dashboard), with elevated access, create one application. Then you will get your access keys: copy and paste the app key, app secret and bearer token on a word/text document as we will need them to connect to Twitter using R.
 
-Then, you need to edit the authentication method. Click on your new app and go down to 'user authentication settings' in the settings tab. 
-Click on 'edit' and select OAuth 1.0a (you may also see OAuth 2.0, ignore it). 
+Then, you need to edit the authentication method. Click on your new app and go down to 'user authentication settings' in the settings tab. Click on 'edit' and select OAuth 1.0a (you may also see OAuth 2.0, ignore it).
 
-Set the permissions to 'read, write', and the 'Callback URL' to "http://127.0.0.1:1410". Save & done with this part!
-
-
+Set the permissions to 'read, write', and the 'Callback URL' to "<http://127.0.0.1:1410>". Save & done with this part!
 
 ### RStudio: installing packages
 
@@ -62,42 +51,34 @@ First things first: open RStudio and install all the packages we will need for t
 install.packages("descr", "rtweet", "tidyverse", "tidytext", "glue", "stringr", "wordcloud", "lubridate", "httr", "httpuv" )
 ```
 
+R might ask you questions while installing these--you can say yes to all of them. If your R installation is old and hasn't been updated in a while, you might get errors when trying to install some of these. In that case, update R first and then install packages.
 
-R might ask you questions while installing these--you can say yes to all of them. 
-If your R installation is old and hasn't been updated in a while, you might get errors when trying to install some of these. In that case, update R first and then install packages. 
-
-Note: R always wipes away all packages when you install a new version, so update R first, install packages second. 
-
+Note: R always wipes away all packages when you install a new version, so update R first, install packages second.
 
 #### A note about Twitter data:
 
-Twitter is among the easiest/most open social media platforms to collect data from. You can get data from Twitter using the API (application programming interface), which require creating a [developers account](http://dev.twitter.com). 
+Twitter is among the easiest/most open social media platforms to collect data from. You can get data from Twitter using the API (application programming interface), which require creating a [developers account](http://dev.twitter.com).
 
 There are several R packages that interact with Twitter's API. We will use rtweet, by [Michael Kearney](https://rtweet.info/articles/intro.html), which can query both the REST and the stream APIs.
 
-
-There are different types of Twitter data you can collect. 
-
+There are different types of Twitter data you can collect.
 
 For the purposes of this workshop and the hands-on work we do here, we will focus a bit more on the REST API, which collects tweets from a timeline (up to 3200) and from a search (of hashtags, keywords etc), as well as networks of users -- e.g. followers / followed accounts.
 
+A free developer account gives you essential access to Twitter data, with a limit of 500,000 tweets per month. Elevated access allows you to get 2 million tweets/month, which is likely enough for most uses.
 
-A free developer account gives you essential access to Twitter data, with a limit of 500,000 tweets per month. Elevated access allows you to get 2 million tweets/month, which is likely enough for most uses. 
+If you decide to use Twitter data for your dissertation, you can also apply for [academic access](https://developer.twitter.com/en/products/twitter-api/academic-research), which can give you access to 10 million tweets per month for free. A caveat is that the Academic access uses Twitter's V2 API, which requires a different package in R, [academictwitteR](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html).
 
-If you decide to use Twitter data for your dissertation, you can also apply for [academic access](https://developer.twitter.com/en/products/twitter-api/academic-research), which can give you access to 10 million tweets per month for free. A caveat is that the Academic access uses Twitter's V2 API, which requires a different package in R,  [academictwitteR](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html).
-
-#### A note about social media research ethics: 
+#### A note about social media research ethics:
 
 In our first session, we will discuss some ethical considerations of doing research online, collecting social media data, and navigating what is public and what is private when doing this type of research. In my experience, UK institutions treat 'social media data' in very different ways when it comes to ethical concerns, to the point that there is no 'gold standard' of dos and dont's. To get us started on this conversation, make sure to read the Ethics Guidelines put together by the [Association of Internet Researchers (AoIR)](https://aoir.org/ire30/).
 
- 
+A couple of relevant references discussing social media research from a methodological and ethical perspective:
 
-A couple of relevant references discussing social media research from a methodological and ethical perspective: 
-- Bruns, A. (2019). After the ‘APIcalypse’: Social media platforms and their fight against critical scholarly research. Information, Communication & Society, 0(0), 1–23. https://doi.org/10.1080/1369118X.2019.1637447 
- - Zimmer, M. Addressing Conceptual Gaps in Big Data Research Ethics: An Application of Contextual Integrity. Social Media + Society, v. 4, n. 2. https://journals.sagepub.com/doi/full/10.1177/2056305118768300  
+\- Bruns, A. (2019). After the 'APIcalypse': Social media platforms and their fight against critical scholarly research. Information, Communication & Society, 0(0), 1--23. <https://doi.org/10.1080/1369118X.2019.1637447>
+
+\- Zimmer, M. Addressing Conceptual Gaps in Big Data Research Ethics: An Application of Contextual Integrity. Social Media + Society, v. 4, n. 2. <https://journals.sagepub.com/doi/full/10.1177/2056305118768300>
 
 That is all for now. Please email me if you have any questions or issues!
 
-
 #### To be continued...
-
