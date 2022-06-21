@@ -500,20 +500,6 @@ while, you might get errors when trying to install some of these. In
 that case, update R first and then install packages.</p>
 <p>Note: R always wipes away all packages when you install a new
 version, so update R first, install packages second.</p>
-<p>It is good practice to call your packages in the beginning of your
-script by using the library command. You may also want to set your work
-directory and a few options, such as removing scientific notations. The
-code below demonstrates how you can call a package in R.</p>
-<pre class="r"><code># options to remove scientific notations and limit digits in numeric outputs to 4
-
-options(scipen=999, digits = 4)
-# call required packages
-library(rtweet)
-library(tidyverse)
-library(lubridate)
-library(glue)
-library(descr)
-library(stringr)</code></pre>
 </div>
 <div id="a-note-about-twitter-data" class="section level3">
 <h3>A note about Twitter data:</h3>
