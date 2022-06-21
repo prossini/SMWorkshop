@@ -4,12 +4,12 @@ author: "Dr Patricia Rossini, University of Glasgow"
 date: "June, 2022, University of Leeds"
 output: 
   html_document:
-    toc: true
+    toc: false
 
-knit: (function(input_file, encoding) {
-   rmarkdown::render(input_file,
- encoding=encoding,
- output_file=file.path(dirname(input_file), 'index.html'))})
+#knit: (function(input_file, encoding) {
+ #  rmarkdown::render(input_file,
+ #encoding=encoding,
+# output_file=file.path(dirname(input_file), 'index.html'))})
 
 
 ---
@@ -88,10 +88,13 @@ If you decide to use Twitter data for your dissertation, you can also apply for 
 
 #### A note about social media research ethics: 
 
-In our first session, we will discuss some ethical considerations of doing research online, collecting social media data, and navigating what is public and what is private when doing this type of research. In my experience, UK institutions treat 'social media data' in very different ways when it comes to ethical concerns, to the point that there is no 'gold standard' of dos and dont's. To get us started on this conversation, make sure to read the Ethics Guidelines put together by the [Association of Internet Researchers (AoIR)](https://aoir.org/ire30/)
+In our first session, we will discuss some ethical considerations of doing research online, collecting social media data, and navigating what is public and what is private when doing this type of research. In my experience, UK institutions treat 'social media data' in very different ways when it comes to ethical concerns, to the point that there is no 'gold standard' of dos and dont's. To get us started on this conversation, make sure to read the Ethics Guidelines put together by the [Association of Internet Researchers (AoIR)](https://aoir.org/ire30/).
 
-Also, you might find this paper interesting as we discuss the (lack of) access to Facebook data. 
+ 
+
+A couple of relevant references discussing social media research from a methodological and ethical perspective: 
 - Bruns, A. (2019). After the ‘APIcalypse’: Social media platforms and their fight against critical scholarly research. Information, Communication & Society, 0(0), 1–23. https://doi.org/10.1080/1369118X.2019.1637447 
+ - Zimmer, M. Addressing Conceptual Gaps in Big Data Research Ethics: An Application of Contextual Integrity. Social Media + Society, v. 4, n. 2. https://journals.sagepub.com/doi/full/10.1177/2056305118768300  
 
 That is all for now. Please email me if you have any questions or issues!
 

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dr Patricia Rossini, University of Glasgow" />
+
+
+<title>Social Media Data Collection &amp; Analysis Workshop</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Patricia Rossini</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Social Media Data Collection &amp; Analysis
+Workshop</h1>
+<h4 class="author">Dr Patricia Rossini, University of Glasgow</h4>
+<h4 class="date">June, 2022, University of Leeds</h4>
+
+</div>
+
+
+<div id="course-description-goals" class="section level2">
+<h2>Course Description &amp; Goals</h2>
+<p>Social media is now a ubiquitous part of everyday life. People are
+routinely using social media to communicate with friends and family,
+follow the latest news, and to participate in politics. As a
+consequence, researchers have been increasingly interested in
+understanding the use, nature and effects of social media in everyday
+life. The scholarly interest on social media use gives rise to a need to
+think carefully about ethical considerations and methods for studying
+these channels, as well as the limitations of this type of research.</p>
+<p>This workshop focuses on social media research methods and overviews
+methods for collecting and analyzing data from social media platforms.
+It also discusses the implications and limitations – both technical and
+ethical – of conducting research on social media. The workshop will
+cover both the theoretical foundations of social media research and the
+practical skills for collecting and analyzing data.</p>
+<p>This course is meant for any student with an interest in researching
+human behavior on and around social media platforms. A computer with
+RStudio installed is required.</p>
+<div id="course-goals" class="section level4">
+<h4>Course Goals</h4>
+<ul>
+<li>Explore ethical considerations of online research</li>
+<li>Examine the unique challenges and opportunities of research
+involving social media use.</li>
+<li>Learn methodological techniques for social media research</li>
+<li>Learn techniques for data collection, cleaning and basic
+analysis</li>
+</ul>
+</div>
+<div id="course-outcomes" class="section level4">
+<h4>Course Outcomes</h4>
+<ul>
+<li>Understand the ethical considerations unique to social media
+research methods</li>
+<li>Understand the relationship between research questions, methods, and
+available data</li>
+<li>Articulate strengths and weaknesses of methodological
+approaches</li>
+<li>Learn how to collect publicly accessible social media data using
+R</li>
+<li>Learn techniques to clean, visualize and analyze social media data
+using R</li>
+</ul>
+</div>
+</div>
+<div id="introduction-app-setup" class="section level2">
+<h2>Introduction &amp; App setup</h2>
+<p>In this workshop, we are going to use R to collect data from social
+media APIs. You should have already created a developer account. From
+your <a
+href="https://developer.twitter.com/en/portal/dashboard">developer’s
+dashboard on Twitter</a>, with elevated access, create one application.
+Then you will get your access keys: copy and paste the app key, app
+secret and bearer token on a word/text document as we will need them to
+connect to Twitter using R.</p>
+<p>Then, you need to edit the authentication method. Click on your new
+app and go down to ‘user authentication settings’ in the settings tab.
+Click on ‘edit’ and select OAuth 1.0a (you may also see OAuth 2.0,
+ignore it).</p>
+<p>Set the permissions to ‘read, write’, and the ‘Callback URL’ to “<a
+href="http://127.0.0.1:1410" class="uri">http://127.0.0.1:1410</a>”.
+Save &amp; done with this part!</p>
+<div id="rstudio-installing-packages" class="section level3">
+<h3>RStudio: installing packages</h3>
+<p>First things first: open RStudio and install all the packages we will
+need for this course running the following code (i.e., paste in the
+‘terminal’ and press enter).</p>
+<pre class="r"><code>install.packages(&quot;descr&quot;, &quot;rtweet&quot;, &quot;tidyverse&quot;, &quot;tidytext&quot;, &quot;glue&quot;, &quot;stringr&quot;, &quot;wordcloud&quot;, &quot;lubridate&quot;, &quot;httr&quot;, &quot;httpuv&quot; )</code></pre>
+<p>R might ask you questions while installing these–you can say yes to
+all of them. If your R installation is old and hasn’t been updated in a
+while, you might get errors when trying to install some of these. In
+that case, update R first and then install packages.</p>
+<p>Note: R always wipes away all packages when you install a new
+version, so update R first, install packages second.</p>
+<div id="a-note-about-twitter-data" class="section level4">
+<h4>A note about Twitter data:</h4>
+<p>Twitter is among the easiest/most open social media platforms to
+collect data from. You can get data from Twitter using the API
+(application programming interface), which require creating a <a
+href="http://dev.twitter.com">developers account</a>.</p>
+<p>There are several R packages that interact with Twitter’s API. We
+will use rtweet, by <a
+href="https://rtweet.info/articles/intro.html">Michael Kearney</a>,
+which can query both the REST and the stream APIs.</p>
+<p>There are different types of Twitter data you can collect.</p>
+<p>For the purposes of this workshop and the hands-on work we do here,
+we will focus a bit more on the REST API, which collects tweets from a
+timeline (up to 3200) and from a search (of hashtags, keywords etc), as
+well as networks of users – e.g. followers / followed accounts.</p>
+<p>A free developer account gives you essential access to Twitter data,
+with a limit of 500,000 tweets per month. Elevated access allows you to
+get 2 million tweets/month, which is likely enough for most uses.</p>
+<p>If you decide to use Twitter data for your dissertation, you can also
+apply for <a
+href="https://developer.twitter.com/en/products/twitter-api/academic-research">academic
+access</a>, which can give you access to 10 million tweets per month for
+free. A caveat is that the Academic access uses Twitter’s V2 API, which
+requires a different package in R, <a
+href="https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html">academictwitteR</a>.</p>
+</div>
+<div id="a-note-about-social-media-research-ethics"
+class="section level4">
+<h4>A note about social media research ethics:</h4>
+<p>In our first session, we will discuss some ethical considerations of
+doing research online, collecting social media data, and navigating what
+is public and what is private when doing this type of research. In my
+experience, UK institutions treat ‘social media data’ in very different
+ways when it comes to ethical concerns, to the point that there is no
+‘gold standard’ of dos and dont’s. To get us started on this
+conversation, make sure to read the Ethics Guidelines put together by
+the <a href="https://aoir.org/ire30/">Association of Internet
+Researchers (AoIR)</a>.</p>
+<p>A couple of relevant references discussing social media research from
+a methodological and ethical perspective: - Bruns, A. (2019). After the
+‘APIcalypse’: Social media platforms and their fight against critical
+scholarly research. Information, Communication &amp; Society, 0(0),
+1–23. <a href="https://doi.org/10.1080/1369118X.2019.1637447"
+class="uri">https://doi.org/10.1080/1369118X.2019.1637447</a> - Zimmer,
+M. Addressing Conceptual Gaps in Big Data Research Ethics: An
+Application of Contextual Integrity. Social Media + Society, v. 4, n. 2.
+<a href="https://journals.sagepub.com/doi/full/10.1177/2056305118768300"
+class="uri">https://journals.sagepub.com/doi/full/10.1177/2056305118768300</a></p>
+<p>That is all for now. Please email me if you have any questions or
+issues!</p>
+</div>
+<div id="to-be-continued" class="section level4">
+<h4>To be continued…</h4>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

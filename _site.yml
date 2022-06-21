@@ -4,7 +4,12 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-   #    - text: "Day 1"
-   #   href: day1.html
+    - text: "About"
+      href: about.html
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
  #   - text: "Day 2"
   #    href: day2.html      
+
