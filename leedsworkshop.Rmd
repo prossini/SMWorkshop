@@ -8,6 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE, eval=FALSE}
+knitr::opts_chunk$set(include = TRUE)
 
 library(rtweet)
 
@@ -17,11 +18,14 @@ token <- create_token(
   consumer_key = app_key, #consumer key for your app, replace the text between quotes with your app's key 
   consumer_secret = app_secret)
 
+```
 
+
+```{r data, include=FALSE}
 load("leaders_tweets270622.RData")
 
-
 ```
+
 
 ## Getting Started
 
@@ -72,7 +76,7 @@ Twitter is among the easiest/most open social media platforms to collect data fr
 
 Now, you need to authenticate with Twitter using the credentials you created for your app. 
 
-```{r twitter oauth, eval=FALSE, include=TRUE, message=FALSE, inspect=FALSE}
+```{r twitter oauth, eval=FALSE, message=FALSE, inspect=FALSE}
 
 ## paste use your credentials here. 
 
@@ -91,7 +95,7 @@ You would use these commands to collect the content of tweets by an account, inc
 
 For instance, let's compare tweets by Boris Johnson & the Conservative party vs tweets by Keir Starmer & Labour
 
-```{r search API, eval=FALSE, include=TRUE}
+```{r search API, eval=FALSE}
 
 ## getting tweets from one user and assigning them to an object named 'Boris'
 ## 
@@ -112,7 +116,7 @@ Note that I added the date I collected the data to the filename before saving. T
 Now we have a dataframe with 90 variables and over 12,000 Tweets from the four accounts.  
 The first step is to inspect our data by looking at the column names:
 
-```{r checking the df, eval=FALSE}
+```{r checking the df}
 colnames(leaders)
 ```
 
@@ -123,7 +127,7 @@ With this command, we can see the different columns in our dataframe. We have en
 We can also view our dataframe in RStudio by clickIng on it in the Environment tab, or inspect the first few columns using: 
 
 
-```{r inspect, include=TRUE, eval=FALSE, inspect=FALSE}
+```{r inspect, eval=FALSE, inspect=FALSE}
 head(leaders)
 ```
 
@@ -184,7 +188,7 @@ Bear in mind this is a sample of tweets (capped at 1% of all tweets at the momen
 
 ```{r search tweets, include=TRUE, eval=FALSE, inspect=FALSE}
 hasthag <- search_tweets(
-  "##sundayvibes",include_rts = FALSE, retryonratelimit = TRUE) # here we are asking the API for tweets using this hashtag, excluding RTs
+  "#sundayvibes",include_rts = FALSE, retryonratelimit = TRUE) # here we are asking the API for tweets using this hashtag, excluding RTs
 
 # search terms using search operators (AND, OR)
 
@@ -218,6 +222,9 @@ The streaming API returns public posts on a 'stream', that is, posted from the t
  - Stream tweets based on a search-like query 
  - Stream tweets by certain users based on user ids
  - Stream tweets based on location using geo coordinates 
+```{r}
+
+```
 
 ```{r stream tweets, include=TRUE, eval=FALSE, inspect=FALSE}
 

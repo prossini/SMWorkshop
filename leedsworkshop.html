@@ -438,6 +438,51 @@ the four accounts.<br />
 The first step is to inspect our data by looking at the column
 names:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(leaders)</span></code></pre></div>
+<pre><code>##  [1] &quot;user_id&quot;                 &quot;status_id&quot;              
+##  [3] &quot;created_at&quot;              &quot;screen_name&quot;            
+##  [5] &quot;text&quot;                    &quot;source&quot;                 
+##  [7] &quot;display_text_width&quot;      &quot;reply_to_status_id&quot;     
+##  [9] &quot;reply_to_user_id&quot;        &quot;reply_to_screen_name&quot;   
+## [11] &quot;is_quote&quot;                &quot;is_retweet&quot;             
+## [13] &quot;favorite_count&quot;          &quot;retweet_count&quot;          
+## [15] &quot;quote_count&quot;             &quot;reply_count&quot;            
+## [17] &quot;hashtags&quot;                &quot;symbols&quot;                
+## [19] &quot;urls_url&quot;                &quot;urls_t.co&quot;              
+## [21] &quot;urls_expanded_url&quot;       &quot;media_url&quot;              
+## [23] &quot;media_t.co&quot;              &quot;media_expanded_url&quot;     
+## [25] &quot;media_type&quot;              &quot;ext_media_url&quot;          
+## [27] &quot;ext_media_t.co&quot;          &quot;ext_media_expanded_url&quot; 
+## [29] &quot;ext_media_type&quot;          &quot;mentions_user_id&quot;       
+## [31] &quot;mentions_screen_name&quot;    &quot;lang&quot;                   
+## [33] &quot;quoted_status_id&quot;        &quot;quoted_text&quot;            
+## [35] &quot;quoted_created_at&quot;       &quot;quoted_source&quot;          
+## [37] &quot;quoted_favorite_count&quot;   &quot;quoted_retweet_count&quot;   
+## [39] &quot;quoted_user_id&quot;          &quot;quoted_screen_name&quot;     
+## [41] &quot;quoted_name&quot;             &quot;quoted_followers_count&quot; 
+## [43] &quot;quoted_friends_count&quot;    &quot;quoted_statuses_count&quot;  
+## [45] &quot;quoted_location&quot;         &quot;quoted_description&quot;     
+## [47] &quot;quoted_verified&quot;         &quot;retweet_status_id&quot;      
+## [49] &quot;retweet_text&quot;            &quot;retweet_created_at&quot;     
+## [51] &quot;retweet_source&quot;          &quot;retweet_favorite_count&quot; 
+## [53] &quot;retweet_retweet_count&quot;   &quot;retweet_user_id&quot;        
+## [55] &quot;retweet_screen_name&quot;     &quot;retweet_name&quot;           
+## [57] &quot;retweet_followers_count&quot; &quot;retweet_friends_count&quot;  
+## [59] &quot;retweet_statuses_count&quot;  &quot;retweet_location&quot;       
+## [61] &quot;retweet_description&quot;     &quot;retweet_verified&quot;       
+## [63] &quot;place_url&quot;               &quot;place_name&quot;             
+## [65] &quot;place_full_name&quot;         &quot;place_type&quot;             
+## [67] &quot;country&quot;                 &quot;country_code&quot;           
+## [69] &quot;geo_coords&quot;              &quot;coords_coords&quot;          
+## [71] &quot;bbox_coords&quot;             &quot;status_url&quot;             
+## [73] &quot;name&quot;                    &quot;location&quot;               
+## [75] &quot;description&quot;             &quot;url&quot;                    
+## [77] &quot;protected&quot;               &quot;followers_count&quot;        
+## [79] &quot;friends_count&quot;           &quot;listed_count&quot;           
+## [81] &quot;statuses_count&quot;          &quot;favourites_count&quot;       
+## [83] &quot;account_created_at&quot;      &quot;verified&quot;               
+## [85] &quot;profile_url&quot;             &quot;profile_expanded_url&quot;   
+## [87] &quot;account_lang&quot;            &quot;profile_banner_url&quot;     
+## [89] &quot;profile_background_url&quot;  &quot;profile_image_url&quot;</code></pre>
 <p>With this command, we can see the different columns in our dataframe.
 We have engagement data (e.g. likes, retweets), data about devices used
 to tweet, geolocation etc. You can check Twitter’s <a
@@ -445,41 +490,41 @@ href="https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-m
 to see what each of these columns mean if you are curious.</p>
 <p>We can also view our dataframe in RStudio by clickIng on it in the
 Environment tab, or inspect the first few columns using:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(leaders)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(leaders)</span></code></pre></div>
 <p>We downloaded tweets from four different accounts, so it is useful to
 inspect the data. Let’s look at how many tweets we have per account. It
 also makes sense to check the earliest date of each account’s tweets so
 that we can filter our data afterwards to make sure we are comparing
 accounts in the same period of time.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(leaders<span class="sc">$</span>screen_name) <span class="co"># freq is a function of the package descr. Unsurprisingly, we have about 3200 for all accounts, as this is the maximum we can retrieve using the free API</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># we can use dplyr to do the same:</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>leaders <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#let&#39;s check the dates. </span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#First we convert the date column to a &#39;date&#39; object using the function as.Date:</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>leaders<span class="sc">$</span>created_at <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(leaders<span class="sc">$</span>created_at)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#then, we check the earliest and latest tweet date per account:</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>leaders <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at))</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># from this we notice that tweets by Boris Johnson go way back to July, 2019, but all others were some time in 2020. </span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># To make our dataset comparable, let&#39;s limit the analysis to tweets posted in 2022, filtering by date. </span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># I will assign the filtered dataset to a new object just in case we want to return to the full set some other time. </span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="ot">&lt;-</span> leaders <span class="sc">%&gt;%</span> <span class="fu">filter</span>(created_at <span class="sc">&gt;=</span> <span class="st">&#39;2022-01-01&#39;</span>) <span class="co">#now our new data has 7040 tweets. Let&#39;s check again the dates to make sure it looks correct: </span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at)) <span class="co"># great, now all our accounts have tweets for the same period of time! </span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(leaders<span class="sc">$</span>screen_name) <span class="co"># freq is a function of the package descr. Unsurprisingly, we have about 3200 for all accounts, as this is the maximum we can retrieve using the free API</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># we can use dplyr to do the same:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>leaders <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#let&#39;s check the dates. </span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#First we convert the date column to a &#39;date&#39; object using the function as.Date:</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>leaders<span class="sc">$</span>created_at <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(leaders<span class="sc">$</span>created_at)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#then, we check the earliest and latest tweet date per account:</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>leaders <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at))</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># from this we notice that tweets by Boris Johnson go way back to July, 2019, but all others were some time in 2020. </span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># To make our dataset comparable, let&#39;s limit the analysis to tweets posted in 2022, filtering by date. </span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># I will assign the filtered dataset to a new object just in case we want to return to the full set some other time. </span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="ot">&lt;-</span> leaders <span class="sc">%&gt;%</span> <span class="fu">filter</span>(created_at <span class="sc">&gt;=</span> <span class="st">&#39;2022-01-01&#39;</span>) <span class="co">#now our new data has 7040 tweets. Let&#39;s check again the dates to make sure it looks correct: </span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at)) <span class="co"># great, now all our accounts have tweets for the same period of time! </span></span></code></pre></div>
 <p>This first part was about inspecting the data and understanding what
 we collected, as well as filtering data by the created date to narrow
 down our tweets to 2022.</p>
 <p>We could look into basic descriptive statistics to further compare
 and analyse these accounts. For instance, let’s look at the means for
 engagement metrics:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_at</span>(<span class="fu">vars</span>(<span class="fu">c</span>(<span class="st">&#39;retweet_count&#39;</span>, <span class="st">&#39;favorite_count&#39;</span>, <span class="st">&#39;reply_count&#39;</span>)), mean, <span class="at">na.rm=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_at</span>(<span class="fu">vars</span>(<span class="fu">c</span>(<span class="st">&#39;retweet_count&#39;</span>, <span class="st">&#39;favorite_count&#39;</span>, <span class="st">&#39;reply_count&#39;</span>)), mean, <span class="at">na.rm=</span>T)</span></code></pre></div>
 </div>
 <div id="hashtags-and-searching-terms" class="section level3">
 <h3>Hashtags and searching terms</h3>
@@ -496,12 +541,12 @@ at the moment of the query) and we don’t have a way to know the
 at any given time. As such, any analysis or results would have to
 account for the limitation of using a sample of an unkrnown
 population.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hasthag <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;##sundayvibes&quot;</span>,<span class="at">include_rts =</span> <span class="cn">FALSE</span>, <span class="at">retryonratelimit =</span> <span class="cn">TRUE</span>) <span class="co"># here we are asking the API for tweets using this hashtag, excluding RTs</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># search terms using search operators (AND, OR)</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>rt <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(<span class="at">q =</span> <span class="st">&quot;rstats AND python&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hasthag <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;#sundayvibes&quot;</span>,<span class="at">include_rts =</span> <span class="cn">FALSE</span>, <span class="at">retryonratelimit =</span> <span class="cn">TRUE</span>) <span class="co"># here we are asking the API for tweets using this hashtag, excluding RTs</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># search terms using search operators (AND, OR)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>rt <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(<span class="at">q =</span> <span class="st">&quot;rstats AND python&quot;</span>)</span></code></pre></div>
 <p>If we inspect this dataset (using colnames, or clicking on the
 environment), you will see that here we have tweets by many different
 accounts that used the hashtag.</p>
@@ -511,10 +556,10 @@ accounts that used the hashtag.</p>
 <p>It is also possible to download someone’s list of followers and
 ‘friends’ (i.e., people one follows). This can be useful to inspect
 networks and to conduct a social network analysis.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># people I follow</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>i_fw <span class="ot">&lt;-</span> <span class="fu">get_friends</span>(<span class="st">&quot;patyrossini&quot;</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># people following me</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>my_fw <span class="ot">&lt;-</span> <span class="fu">get_followers</span>(<span class="st">&quot;patyrossini&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># people I follow</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>i_fw <span class="ot">&lt;-</span> <span class="fu">get_friends</span>(<span class="st">&quot;patyrossini&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># people following me</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>my_fw <span class="ot">&lt;-</span> <span class="fu">get_followers</span>(<span class="st">&quot;patyrossini&quot;</span>)</span></code></pre></div>
 </div>
 <div id="streaming-api" class="section level3">
 <h3>Streaming API</h3>
@@ -526,11 +571,11 @@ query: - Sampling a small random sample of all publicly available tweets
 - Stream tweets based on a search-like query - Stream tweets by certain
 users based on user ids - Stream tweets based on location using geo
 coordinates</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stream tweets based on search (can use advance operator)</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">stream_tweets</span>(<span class="at">q =</span> <span class="st">&quot;weather&quot;</span>, <span class="at">timeout =</span> <span class="dv">30</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># stream random sample</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>sr <span class="ot">&lt;-</span> <span class="fu">stream_tweets</span>(<span class="at">q =</span> <span class="st">&quot;&quot;</span>, <span class="at">timeout =</span> <span class="dv">30</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stream tweets based on search (can use advance operator)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">stream_tweets</span>(<span class="at">q =</span> <span class="st">&quot;weather&quot;</span>, <span class="at">timeout =</span> <span class="dv">30</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># stream random sample</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sr <span class="ot">&lt;-</span> <span class="fu">stream_tweets</span>(<span class="at">q =</span> <span class="st">&quot;&quot;</span>, <span class="at">timeout =</span> <span class="dv">30</span>)</span></code></pre></div>
 </div>
 </div>
 

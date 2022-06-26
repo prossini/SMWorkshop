@@ -26,7 +26,6 @@ leaders %>% group_by(screen_name) %>%
 
 
 
-
 leaders_analysis %>% group_by(screen_name) %>%
   summarise_at(vars(c('retweet_count', 'favorite_count')), mean)
 
