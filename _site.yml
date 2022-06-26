@@ -6,10 +6,13 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+    - text: "Day 1"
+      href: leedsworkshop.html
+      
 output:
   html_document:
     theme: cosmo
-    highlight: textmate
+    highlight: haddock
  #   - text: "Day 2"
   #    href: day2.html      
 
