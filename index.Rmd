@@ -2,9 +2,7 @@
 title: "Social Media Data Collection & Analysis Workshop"
 author: "Dr Patricia Rossini, University of Glasgow"
 date: "June, 2022, University of Leeds"
-output: 
-  html_document:
-    toc: false
+
 
 #knit: (function(input_file, encoding) {
 #  rmarkdown::render(input_file,
