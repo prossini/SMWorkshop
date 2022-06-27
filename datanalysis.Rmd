@@ -1,0 +1,154 @@
+---
+title: "Data Analysis and Visualisation with Twitter Data"
+author: "Patricia Rossini"
+date: '2022-06-26'
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+
+load("leaders270622.RData")
+
+```
+
+## Data Analysis
+
+There are different analytic techniques you can use to study twitter data depending on your research interests. 
+In this workshop, we are only covering a few possibilities to give you an idea of research projects using Twitter data, focusing a bit more on improving the understanding of the possibilities 
+
+
+If you want to keep learning R to analyze Twitter data, you can also explore more automated techniques that we will not to cover here.For instance, you could use textual mining and analysis techniques if you want to find which words are more frequently associated with a particular hashtag. You can also consider network analysis techniques if you want to study relationships between accounts. 
+
+
+There are several online tutorials that will teach you how to implement these techniques on tweets using R. Just use Google :) 
+
+
+### Exploring Twitter Datasets
+
+Let's begin with basic descriptives, as this will help you better understand the data you collected. 
+We collected a dataset that contains tweets from leader accounts for the two main political parties in the UK. 
+
+Now that we have a filtered dataset looking at a specific point in time (2021 if you are using the same data as me) 
+We could look into basic descriptive statistics to further compare and analyse these accounts. 
+For instance, let's look at the means for engagement metrics: 
+
+
+```{r means, include=TRUE, eval=FALSE, inspect=FALSE}
+load("leaders270622.RData")
+
+leaders_2021 %>% group_by(screen_name) %>%
+  summarise_at(vars(c('retweet_count', 'favorite_count')), .funs = c(mean = mean), na.rm=TRUE)
+
+
+```
+
+
+### Time Series
+
+Time series are useful to understand data patterns over time. This can help you compare how much different accounts tweet over time, or investigate tweets (or engagements) over a period of time. The main point of a time series plot is to show trends over a certain period of time.
+
+
+For instance, considering the leaders dataset we collected, we can plot the four accounts' Twitter activity in 2021 to answer basic research questions such as who was more active on Twitter, and when, observing peaks of activity. 
+
+```{r, include=TRUE}
+
+leaders_2021 %>%
+  group_by(screen_name) %>% 
+  rtweet::ts_plot("weeks", trim = 2L) +
+  geom_abline() +
+  theme_classic() +
+  scale_x_datetime(date_labels = "%b %d", breaks = "2 week") +
+  scale_color_brewer(type = "qual", palette = 2) +
+  ggplot2::theme(
+    legend.title = ggplot2::element_blank(),
+    legend.position = "bottom",
+    plot.title = ggplot2::element_text(face = "bold")) +
+  ggplot2::labs(
+    x = NULL, y = NULL,
+    title = "@BorisJohnson & @Keir_Starmer on Twitter, 2021",
+    subtitle = "Aggregated by 2 weeks")  + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+You can tweak your plot changing the colors, breaks (hours, days, weeks...), the type of the plot, the theme etc. Check [ggplot2](https://ggplot2.tidyverse.org/reference/) reference to learn more about these options. 
+
+## Other visualisations
+
+To create our plot, we will use a 'pipe' to filter the data and remove the missing values (NAs) before we call ggplot to create the graphics. 
+
+```{r ggplot}
+# basic plot of retweet vs tweets
+
+leaders_2021 %>% 
+  ggplot(aes(x=is_retweet, fill = screen_name)) +
+  geom_bar(position = "dodge")
+```
+
+The plot can take several arguments for customization. For instance, we can add some text to it, filter more values, or change the theme.
+
+```{r}
+
+leaders_2021 %>% 
+  ggplot(aes(x=is_retweet, fill = screen_name)) +
+  geom_bar(position = "dodge") + 
+  labs(title = "Original Tweets and Retweets", caption = "Tweets from 01/01/2021 - 31/12/2021", x = "Is Retweet?", y = "N", fill = "Account") + theme_minimal()
+
+```
+
+
+Finally, let's create a plot using percentages. 
+To do this, we will use pipes again to calculate percentages before creating the plot:
+
+
+```{r}
+leaders_2021 %>% 
+  group_by(screen_name, is_retweet) %>% # we are using this to make sure the data is grouped to calculate proportions
+  summarize(n = n()) %>% 
+  mutate(perc = 100*n/sum(n)) 
+
+# If you want to keep this table as a separate object, just assign it to an object (percentages_tab is an arbitrary name I picked): 
+
+percentages <- leaders_2021 %>% 
+  group_by(screen_name, is_retweet) %>% # we are using this to make sure the data is grouped to calculate proportions
+  summarize(n = n()) %>% 
+  mutate(perc = 100*n/sum(n)) 
+
+```
+
+
+Now that we learned how to calculate percentages using two variables, let's incorporate them in the plot with another pipe:
+
+
+```{r percentage plot, message=FALSE}
+leaders_2021 %>% 
+  group_by(screen_name, is_retweet) %>% 
+  summarize(n = n()) %>% 
+  mutate(perc = 100*n/sum(n)) %>%
+  ggplot(aes(x= is_retweet, fill = screen_name, y = perc)) +
+  geom_bar(position = "dodge",stat = "identity") + #we changed stat to identity because we  
+  theme_minimal() + 
+  labs(title = "Proportion of original Tweets and Retweets", caption = "Tweets from 01/01/2021 - 31/12/2021", x = "Is Retweet?", y = "%", fill = "Account") + theme_minimal() + 
+  ylim(c(0, 100)) # this determines the limits of the y axis. 
+
+
+```
+
+And done :) 
+
+You can save/export the figures you created using the following code (or by clicking  'export' in the plots pane in RStudio): 
+
+```{r save plot, eval=FALSE, message=FALSE, inspect=FALSE}
+ggsave(
+  filename,
+  plot = last_plot(), dpi = 300)
+```
+
+
+
+
+
+# Don't forget!
+
+There are many other things you could do, such as getting a list of followers and followed accounts by a specific account. This workshop only focused on getting tweets based on accounts and hashtags as these are the most likely use-cases for your own dissertations, but you can find many more use cases by looking at the [documentation for RTweet](https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html)

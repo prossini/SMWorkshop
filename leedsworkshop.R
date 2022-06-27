@@ -19,28 +19,27 @@ library(stringr)
 
 ## getting tweets from one user and assigning them to an object named 'Boris'
 boris <- get_timeline("BorisJohnson", n=3200, retryOnRateLimit=120, resultType = "recent")
-##
-##
-## ## getting tweets from several users and assigning them to a single object named 'leaders'
-## leaders <- get_timeline(c("BorisJohnson", "Keir_Starmer", "Conservatives", "UKLabour") , n=3200, retryOnRateLimit=120, resultType = "recent", parse = TRUE)
-##
-## # if we want to save this data to work on it later, just use the following command:
-## save(leaders, file = "leaders_tweets270622.RData") # to save it as an R object
-## write_as_csv(leaders, file_name = "leaders_tweets270622.csv") # to save as a CSV that can be opened in excel. This function is from the package rtweet, not the same as 'write.csv' from base R.
+
+
+## getting tweets from several users and assigning them to a single object named 'leaders'
+leaders <- get_timeline(c("BorisJohnson", "Keir_Starmer", "Conservatives", "UKLabour") , n=3200, retryOnRateLimit=120, resultType = "recent", parse = TRUE)
+
+## if we want to save this data to work on it later, just use the following command:
+save(leaders, file = "leaders_tweets270622.RData") # to save it as an R object
+write_as_csv(leaders, file_name = "leaders_tweets270622.csv") # to save as a CSV that can be opened in excel. This function is from the package rtweet, not the same as 'write.csv' from base R.
 
 ## colnames(leaders)
 
 ## head(leaders)
-
+## 
 ##
 ## freq(leaders$screen_name) # freq is a function of the package descr. Unsurprisingly, we have about 3200 for all accounts, as this is the maximum we can retrieve using the free API
 ##
 ## # we can use dplyr to do the same:
 ##
-## leaders %>% group_by(screen_name) %>%
-##   count()
-##
-##
+leaders %>% group_by(screen_name) %>%
+   count()
+
 ## #let's check the dates.
 ## #First we convert the date column to a 'date' object using the function as.Date:
 ## leaders$created_at <- as.Date(leaders$created_at)

@@ -78,38 +78,46 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
+    background-color: #ffffff;
+    color: #a0a0a0;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #1f1c1b; background-color: #ffffff; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; } /* Alert */
-code span.an { color: #008000; } /* Annotation */
-code span.at { } /* Attribute */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #0000ff; } /* ControlFlow */
-code span.ch { color: #008080; } /* Char */
-code span.cn { } /* Constant */
-code span.co { color: #008000; } /* Comment */
-code span.cv { color: #008000; } /* CommentVar */
-code span.do { color: #008000; } /* Documentation */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.im { } /* Import */
-code span.in { color: #008000; } /* Information */
-code span.kw { color: #0000ff; } /* Keyword */
-code span.op { } /* Operator */
-code span.ot { color: #ff4000; } /* Other */
-code span.pp { color: #ff4000; } /* Preprocessor */
-code span.sc { color: #008080; } /* SpecialChar */
-code span.ss { color: #008080; } /* SpecialString */
-code span.st { color: #008080; } /* String */
-code span.va { } /* Variable */
-code span.vs { color: #008080; } /* VerbatimString */
-code span.wa { color: #008000; font-weight: bold; } /* Warning */
+code span { color: #1f1c1b; } /* Normal */
+code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.at { color: #0057ae; } /* Attribute */
+code span.bn { color: #b08000; } /* BaseN */
+code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #924c9d; } /* Char */
+code span.cn { color: #aa5500; } /* Constant */
+code span.co { color: #898887; } /* Comment */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.do { color: #607880; } /* Documentation */
+code span.dt { color: #0057ae; } /* DataType */
+code span.dv { color: #b08000; } /* DecVal */
+code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code span.fl { color: #b08000; } /* Float */
+code span.fu { color: #644a9b; } /* Function */
+code span.im { color: #ff5500; } /* Import */
+code span.in { color: #b08000; } /* Information */
+code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code span.op { color: #1f1c1b; } /* Operator */
+code span.ot { color: #006e28; } /* Other */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.st { color: #bf0303; } /* String */
+code span.va { color: #0057ae; } /* Variable */
+code span.vs { color: #bf0303; } /* VerbatimString */
+code span.wa { color: #bf0303; } /* Warning */
 
 </style>
 <script>
@@ -333,6 +341,7 @@ $(document).ready(function () {
 <li>
   <a href="leedsworkshop.html">Day 1</a>
 </li>
+<li class="dropdown-header">Day 2</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -527,19 +536,20 @@ accounts in the same period of time.</p>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>leaders <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at))</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># from this we notice that tweets by Boris Johnson go way back to July, 2019, but all others were some time in 2020. </span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># To make our dataset comparable, let&#39;s limit the analysis to tweets posted in 2022, filtering by date. </span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># To make our dataset comparable, let&#39;s limit the analysis to tweets posted in 2021, filtering by date. </span></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># I will assign the filtered dataset to a new object just in case we want to return to the full set some other time. </span></span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="ot">&lt;-</span> leaders <span class="sc">%&gt;%</span> <span class="fu">filter</span>(created_at <span class="sc">&gt;=</span> <span class="st">&#39;2022-01-01&#39;</span>) <span class="co">#now our new data has 7040 tweets. Let&#39;s check again the dates to make sure it looks correct: </span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at)) <span class="co"># great, now all our accounts have tweets for the same period of time! </span></span></code></pre></div>
-<p>This first part was about inspecting the data and understanding what
-we collected, as well as filtering data by the created date to narrow
-down our tweets to 2022.</p>
-<p>We could look into basic descriptive statistics to further compare
-and analyse these accounts. For instance, let’s look at the means for
-engagement metrics:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_at</span>(<span class="fu">vars</span>(<span class="fu">c</span>(<span class="st">&#39;retweet_count&#39;</span>, <span class="st">&#39;favorite_count&#39;</span>, <span class="st">&#39;reply_count&#39;</span>)), mean, <span class="at">na.rm=</span>T)</span></code></pre></div>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>leaders_2021 <span class="ot">&lt;-</span> leaders <span class="sc">%&gt;%</span> <span class="fu">filter</span>(date <span class="sc">&gt;=</span> <span class="st">&quot;2021-01-01&quot;</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>leaders_2021 <span class="ot">&lt;-</span> leaders <span class="sc">%&gt;%</span> <span class="fu">filter</span>(date <span class="sc">&gt;=</span> <span class="st">&quot;2021-01-01&quot;</span> <span class="sc">&amp;</span> date <span class="sc">&lt;</span> <span class="st">&quot;2022-01-01&quot;</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>leaders_2021 <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at))</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>leaders_2021 <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">count</span>()</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co"># let&#39;s inspect to make sure it looks ok</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>leaders_analysis <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at)) <span class="co"># great, now all our accounts have tweets for the same period of time! </span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co"># with this code, we save our data to start off tomorrow from it. </span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(leaders, leaders_2021, <span class="at">file =</span> <span class="st">&quot;leaders270622.RData&quot;</span>)</span></code></pre></div>
 </div>
 <div id="hashtags-and-searching-terms" class="section level3">
 <h3>Hashtags and searching terms</h3>
@@ -556,12 +566,12 @@ at the moment of the query) and we don’t have a way to know the
 at any given time. As such, any analysis or results would have to
 account for the limitation of using a sample of an unkrnown
 population.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hasthag <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;#sundayvibes&quot;</span>,<span class="at">include_rts =</span> <span class="cn">FALSE</span>, <span class="at">retryonratelimit =</span> <span class="cn">TRUE</span>) <span class="co"># here we are asking the API for tweets using this hashtag, excluding RTs</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># search terms using search operators (AND, OR)</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>rt <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(<span class="at">q =</span> <span class="st">&quot;rstats AND python&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hasthag <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;#sundayvibes&quot;</span>,<span class="at">include_rts =</span> <span class="cn">FALSE</span>, <span class="at">retryonratelimit =</span> <span class="cn">TRUE</span>) <span class="co"># here we are asking the API for tweets using this hashtag, excluding RTs</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># search terms using search operators (AND, OR)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>rt <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(<span class="at">q =</span> <span class="st">&quot;rstats AND python&quot;</span>)</span></code></pre></div>
 <p>If we inspect this dataset (using colnames, or clicking on the
 environment), you will see that here we have tweets by many different
 accounts that used the hashtag.</p>
@@ -571,10 +581,10 @@ accounts that used the hashtag.</p>
 <p>It is also possible to download someone’s list of followers and
 ‘friends’ (i.e., people one follows). This can be useful to inspect
 networks and to conduct a social network analysis.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># people I follow</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>i_fw <span class="ot">&lt;-</span> <span class="fu">get_friends</span>(<span class="st">&quot;patyrossini&quot;</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># people following me</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>my_fw <span class="ot">&lt;-</span> <span class="fu">get_followers</span>(<span class="st">&quot;patyrossini&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># people I follow</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>i_fw <span class="ot">&lt;-</span> <span class="fu">get_friends</span>(<span class="st">&quot;patyrossini&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># people following me</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>my_fw <span class="ot">&lt;-</span> <span class="fu">get_followers</span>(<span class="st">&quot;patyrossini&quot;</span>)</span></code></pre></div>
 </div>
 <div id="streaming-api" class="section level3">
 <h3>Streaming API</h3>
@@ -586,11 +596,11 @@ query: - Sampling a small random sample of all publicly available tweets
 - Stream tweets based on a search-like query - Stream tweets by certain
 users based on user ids - Stream tweets based on location using geo
 coordinates</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stream tweets based on search (can use advance operator)</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">stream_tweets</span>(<span class="at">q =</span> <span class="st">&quot;weather&quot;</span>, <span class="at">timeout =</span> <span class="dv">30</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># stream random sample</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sr <span class="ot">&lt;-</span> <span class="fu">stream_tweets</span>(<span class="at">q =</span> <span class="st">&quot;&quot;</span>, <span class="at">timeout =</span> <span class="dv">30</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stream tweets based on search (can use advance operator)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">stream_tweets</span>(<span class="at">q =</span> <span class="st">&quot;weather&quot;</span>, <span class="at">timeout =</span> <span class="dv">30</span>, <span class="at">lang=</span><span class="st">&#39;en&#39;</span>) <span class="do">## added lang = en to make sure we only get tweets in english. can be used in any search query</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># stream random sample</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>sr <span class="ot">&lt;-</span> <span class="fu">stream_tweets</span>(<span class="at">q =</span> <span class="st">&quot;&quot;</span>, <span class="at">timeout =</span> <span class="dv">30</span>)</span></code></pre></div>
 </div>
 </div>
 

@@ -153,27 +153,22 @@ leaders$created_at <- as.Date(leaders$created_at)
 leaders %>% group_by(screen_name) %>% summarise(min(created_at), max(created_at))
 
 # from this we notice that tweets by Boris Johnson go way back to July, 2019, but all others were some time in 2020. 
-# To make our dataset comparable, let's limit the analysis to tweets posted in 2022, filtering by date. 
+# To make our dataset comparable, let's limit the analysis to tweets posted in 2021, filtering by date. 
 # I will assign the filtered dataset to a new object just in case we want to return to the full set some other time. 
 
-leaders_analysis <- leaders %>% filter(created_at >= '2022-01-01') #now our new data has 7040 tweets. Let's check again the dates to make sure it looks correct: 
+leaders_2021 <- leaders %>% filter(date >= "2021-01-01")
+leaders_2021 <- leaders %>% filter(date >= "2021-01-01" & date < "2022-01-01")
+
+leaders_2021 %>% group_by(screen_name) %>% summarise(min(created_at), max(created_at))
+leaders_2021 %>% group_by(screen_name) %>% count()
+# let's inspect to make sure it looks ok
 leaders_analysis %>% group_by(screen_name) %>% summarise(min(created_at), max(created_at)) # great, now all our accounts have tweets for the same period of time! 
 
+
+# with this code, we save our data to start off tomorrow from it. 
+save(leaders, leaders_2021, file = "leaders270622.RData")
 ```
 
-
-This first part was about inspecting the data and understanding what we collected, as well as filtering data by the created date to narrow down our tweets to 2022. 
-
-We could look into basic descriptive statistics to further compare and analyse these accounts. 
-For instance, let's look at the means for engagement metrics: 
-
-
-```{r means, include=TRUE, eval=FALSE, inspect=FALSE}
-
-
-leaders_analysis %>% group_by(screen_name) %>%
-  summarise_at(vars(c('retweet_count', 'favorite_count', 'reply_count')), mean, na.rm=T)
-```
 
 
 ### Hashtags and searching terms
@@ -229,7 +224,7 @@ The streaming API returns public posts on a 'stream', that is, posted from the t
 ```{r stream tweets, include=TRUE, eval=FALSE, inspect=FALSE}
 
 # stream tweets based on search (can use advance operator)
-st <- stream_tweets(q = "weather", timeout = 30)
+st <- stream_tweets(q = "weather", timeout = 30, lang='en') ## added lang = en to make sure we only get tweets in english. can be used in any search query
 
 # stream random sample
 sr <- stream_tweets(q = "", timeout = 30)
