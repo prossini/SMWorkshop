@@ -341,7 +341,9 @@ $(document).ready(function () {
 <li>
   <a href="leedsworkshop.html">Day 1</a>
 </li>
-<li class="dropdown-header">Day 2</li>
+<li>
+  <a href="datanalysis.html">Day 2</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -530,7 +532,7 @@ accounts in the same period of time.</p>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#let&#39;s check the dates. </span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#First we convert the date column to a &#39;date&#39; object using the function as.Date:</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>leaders<span class="sc">$</span>created_at <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(leaders<span class="sc">$</span>created_at)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>leaders<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(leaders<span class="sc">$</span>created_at)</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#then, we check the earliest and latest tweet date per account:</span></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>leaders <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">min</span>(created_at), <span class="fu">max</span>(created_at))</span>

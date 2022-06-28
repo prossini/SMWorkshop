@@ -2,6 +2,10 @@
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(dplyr)
+library(readr)
 
 load("leaders270622.RData")
 
@@ -82,7 +86,7 @@ leaders_2021 %>%
 
 
 ## ----save plot, eval=FALSE, message=FALSE, inspect=FALSE-------------------------------------------------------------------------------------------------------
-## ggsave(
-##   filename,
-##   plot = last_plot(), dpi = 300)
+ggsave(
+   filename,
+   plot = last_plot(), dpi = 300)
 

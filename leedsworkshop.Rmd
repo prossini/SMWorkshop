@@ -147,7 +147,7 @@ leaders %>% group_by(screen_name) %>%
 
 #let's check the dates. 
 #First we convert the date column to a 'date' object using the function as.Date:
-leaders$created_at <- as.Date(leaders$created_at)
+leaders$date <- as.Date(leaders$created_at)
 
 #then, we check the earliest and latest tweet date per account:
 leaders %>% group_by(screen_name) %>% summarise(min(created_at), max(created_at))

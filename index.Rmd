@@ -3,11 +3,6 @@ title: "Social Media Data Collection & Analysis Workshop"
 author: "Dr Patricia Rossini, University of Glasgow"
 date: "June, 2022, University of Leeds"
 
-
-#knit: (function(input_file, encoding) {
-#  rmarkdown::render(input_file,
-#  encoding=encoding,
-#  output_file=file.path(dirname(input_file), 'index.html'))})
 ---
 
 ## Course Description & Goals

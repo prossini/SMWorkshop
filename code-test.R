@@ -33,3 +33,23 @@ usa <- stream_tweets(
   lookup_coords("Liverpool"),
   timeout = 60
 )
+
+
+
+library(tidytext)
+library(stringr)
+
+
+
+
+
+
+
+tidy <- leaders_2021 %>% 
+  unnest_tokens(hashtags, token = "tweets")
+
+
+
+
+
+

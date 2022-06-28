@@ -146,6 +146,26 @@ ggsave(
 ```
 
 
+### Some basic textual analysis
+
+
+
+
+
+```{r text, eval=FALSE, message=FALSE, inspect=FALSE}
+
+library(lubridate)
+library(ggplot2)
+library(dplyr)
+library(readr)
+
+
+
+
+
+```
+
+
 
 
 
