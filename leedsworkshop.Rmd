@@ -2,9 +2,6 @@
 title: "Data Collection with Twitter API (V.1.1)"
 author: "Patricia Rossini, University of Glasgow"
 date: 'June 27-28, 2022'
-output: 
-  html_document:
-    toc: true
 ---
 
 ```{r setup, include=FALSE, eval=FALSE}
