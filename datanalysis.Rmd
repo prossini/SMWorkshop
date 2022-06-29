@@ -257,4 +257,10 @@ hashtag <- subset(leaders_2021, !is.na(hashtags)) # removes tweets without hasht
 
 # Don't forget!
 
-There are many other things you could do, such as getting a list of followers and followed accounts by a specific account. This workshop only focused on getting tweets based on accounts and hashtags as these are the most likely use-cases for your own dissertations, but you can find many more use cases by looking at the [documentation for RTweet](https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html)
+There are many other things you could do, such as getting a list of followers and followed accounts by a specific account. This workshop only focused on getting tweets based on accounts and hashtags as these are common use-cases for research, but you can find many more use cases by looking at the [documentation for RTweet](https://cran.r-project.org/web/packages/rtweet/vignettes/intro.html)
+
+
+Additional resources:
+
+- [Textual Analysis](https://www.tidytextmining.com/)
+- [Network Analysis](https://rpubs.com/ben_bellman/rtweet_tidygraph)

@@ -15,7 +15,6 @@ output:
   html_document:
     theme: cosmo
     highlight: kate
- #   - text: "Day 2"
-  #    href: day2.html      
+
 
 output_dir: "." 
