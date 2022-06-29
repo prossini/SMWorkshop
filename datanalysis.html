@@ -342,7 +342,9 @@ $(document).ready(function () {
 <li>
   <a href="leedsworkshop.html">Day 1</a>
 </li>
-<li class="dropdown-header">Day 2</li>
+<li>
+  <a href="datanalysis.html">Day 2</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -487,6 +489,102 @@ let’s incorporate them in the plot with another pipe:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  filename,</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="fu">last_plot</span>(), <span class="at">dpi =</span> <span class="dv">300</span>)</span></code></pre></div>
+<div id="hashtag-analysis" class="section level3">
+<h3>Hashtag Analysis</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first, let&#39;s use DPLYR&#39;s select function to create a new dataframe with only a few selected columns. </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>leaders_hash <span class="ot">&lt;-</span> <span class="fu">select</span>(leaders_2021, screen_name, hashtags, favorite_count, retweet_count)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># because hashtags are sometimes in a list, e.g. c(&#39;hasthag1&#39;, &#39;hashtag2&#39;), we need to unnest them. Here we still use group_by because we care about hashtags per account. </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="do">## note that this is a more elegant solution to what we did during the workshop. We are changing hashtags to lower case inside the pipe, before we count!</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>hash <span class="ot">&lt;-</span> leaders_hash <span class="sc">%&gt;%</span> </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(hashtags)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hashtags =</span> <span class="fu">tolower</span>(hashtags)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(hashtags)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># If we want to just take a look at the top 10 hashtags per account, then: </span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co"># top10 </span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>top10 <span class="ot">&lt;-</span> hash <span class="sc">%&gt;%</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(hashtags)) <span class="sc">%&gt;%</span>  <span class="co"># get rid of the blank value</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> n, <span class="at">n =</span> <span class="dv">10</span>) <span class="co"># change 10 for any number if you want more!</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Then, we can plot top 10 hashtags with a facet grid</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>top10 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> hashtags, <span class="at">y =</span> n, <span class="at">fill =</span> screen_name)) <span class="sc">+</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">facet_grid</span>(. <span class="sc">~</span> screen_name )</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="co"># filtering by words in a hashtag and assigning to a dataset </span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> hash <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">&#39;covid&#39;</span>, hashtags)) </span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="co"># you can do the same but with tweets,</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a><span class="co"># first, lower case</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>text <span class="ot">&lt;-</span> <span class="fu">tolower</span>(leaders_2021<span class="sc">$</span>text)</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="co"># then search for word in tex</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> leaders_2021 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">&quot;london&quot;</span>, text))</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>hash <span class="ot">&lt;-</span> leaders_hash <span class="sc">%&gt;%</span> </span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(hashtags)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hashtags =</span> <span class="fu">tolower</span>(hashtags)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(hashtags)</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a><span class="co"># likes per hashtag </span></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>likes <span class="ot">&lt;-</span> leaders_hash <span class="sc">%&gt;%</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(hashtags)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hashtags =</span> <span class="fu">tolower</span>(hashtags)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(hashtags, screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(hashtags)) <span class="sc">%&gt;%</span>  <span class="co"># get rid of the blank value</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_likes =</span> <span class="fu">sum</span>(favorite_count)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a><span class="co"># RTs by hashtag</span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>RT <span class="ot">&lt;-</span> leaders_hash <span class="sc">%&gt;%</span></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(hashtags)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hashtags =</span> <span class="fu">tolower</span>(hashtags)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(hashtags, screen_name) <span class="sc">%&gt;%</span></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(hashtags)) <span class="sc">%&gt;%</span>  <span class="co"># get rid of the blank value</span></span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_rts =</span> <span class="fu">sum</span>(retweet_count)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div>
+</div>
+<div id="extra-useful-bits-of-code" class="section level3">
+<h3>Extra useful bits of code</h3>
+<p>Here I’ll leave some extra functions we looked at that could be
+useful to you:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># recode values in the dataset</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(leaders_2021<span class="sc">$</span>retweet_location) <span class="co"># we see lots of inconsistencies in how cities are presented. We can rename them to normalize</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>retweet_location[leaders_2021<span class="sc">$</span>retweet_location <span class="sc">==</span> <span class="st">&quot;Leeds, England&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Leeds&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>retweet_location[leaders_2021<span class="sc">$</span>retweet_location <span class="sc">==</span> <span class="st">&quot;London, England&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;London&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>retweet_location[leaders_2021<span class="sc">$</span>retweet_location <span class="sc">==</span> <span class="st">&quot;Manchester, UK&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Manchester&quot;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># for two variables, we can use if else statements</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># to create new variables based on conditions</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>Party <span class="ot">&lt;-</span> <span class="st">&quot;Labour&quot;</span> <span class="co"># first we initialize the column with one value</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># then the ifelse statement will replace values based on conditions:</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>Party <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(leaders_2021<span class="sc">$</span>screen_name <span class="sc">==</span> <span class="st">&quot;BorisJohnson&quot;</span>, <span class="st">&quot;Tory&quot;</span>, <span class="st">&quot;Labour&quot;</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create new variables based on conditions ####</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>popular_tweets <span class="ot">&lt;-</span>  <span class="st">&quot;viral&quot;</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>popular_tweets[leaders_2021<span class="sc">$</span>favorite_count <span class="sc">&gt;</span> <span class="dv">500</span> <span class="sc">&amp;</span> leaders_2021<span class="sc">$</span>favorite_count <span class="sc">&lt;</span> <span class="dv">1000</span>] <span class="ot">&lt;-</span> <span class="st">&#39;popular&#39;</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>leaders_2021<span class="sc">$</span>popular_tweets[leaders_2021<span class="sc">$</span>favorite_count <span class="sc">&lt;=</span> <span class="dv">500</span>] <span class="ot">&lt;-</span> <span class="st">&#39;less popular&#39;</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(leaders_2021<span class="sc">$</span>popular_tweets)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co"># subset data based on conditions</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>unpopular <span class="ot">&lt;-</span> <span class="fu">subset</span>(leaders_2021, favorite_count <span class="sc">&lt;=</span> <span class="dv">500</span>) <span class="co"># select tweets with fewer than 500 likes</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>hashtag <span class="ot">&lt;-</span> <span class="fu">subset</span>(leaders_2021, <span class="sc">!</span><span class="fu">is.na</span>(hashtags)) <span class="co"># removes tweets without hashtags</span></span></code></pre></div>
+</div>
 </div>
 <div id="dont-forget" class="section level1">
 <h1>Don’t forget!</h1>
