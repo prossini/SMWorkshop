@@ -6,7 +6,8 @@ library(lubridate)
 library(descr)
 library(stringr)
 library(rtweet)
-
+\
+create_tok
 # authentication ####
 create_token(app = "tweet-collections-R",
              consumer_key = "vCNeg272fEMh1MY2iw9AQKUq2",
@@ -14,6 +15,12 @@ create_token(app = "tweet-collections-R",
 
 # get timelines ####
 # 
+
+patricia <- 5
+
+
+
+
 
 boris <- get_timeline("BorisJohnson", n = 3200)
 
@@ -55,6 +62,8 @@ myfolowers <- get_followers("patyrossini")
 hashtag2 <- search_tweets(q = "#rstats", include_rts = FALSE, n = 2000)
 
 
+setwd("~/Documents/GitHub/SMWorkshop/")
+
 
 # some descriptive analyses #### 
 load('leaders270622.RData')
@@ -77,4 +86,20 @@ leaders_2021 %>% group_by(screen_name) %>% summarise(min(created_at), max(create
 leaders_2021 %>% group_by(screen_name) %>% count()
 
 save(leaders, leaders_2021, file = "leaders270622.RData")
+
+
+save(leaders, leaders_2021, file = "leaders270622.RData")
+write_as_csv(leaders, file_name = "leaders270622.csv")
+
+df <- read.csv("leaders270622.csv")
+
+
+
+
+
+
+
+write_as_csv(x, file_name = "\\")
+
+
 load("leaders270622.RData")

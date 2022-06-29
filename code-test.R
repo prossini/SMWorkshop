@@ -40,15 +40,34 @@ library(tidytext)
 library(stringr)
 
 
+# visu
+leaders_hash <- select(leaders_2021, screen_name, hashtags)
+x <- leaders_hash %>% 
+  group_by(screen_name) %>%
+  unnest(c(hashtags)) %>%
+  count(hashtags)
+
+leaders_hash %>% 
+  unnest(c(hashtags)) %>%
+  count(hashtags)
+# top5 
+x <- leaders_hash %>%
+  group_by(screen_name) %>%
+  unnest(c(hashtags)) %>%
+  count(hashtags) %>%
+  filter(!is.na(hashtags)) %>%  # get rid of the blank value
+  slice_max(order_by = n, n = 10)
 
 
+x %>% 
+  ggplot(aes(x = hashtags, y = n, fill = screen_name)) + 
+  geom_bar(stat = "identity", position = "dodge") + coord_flip() + facet_grid( . ~ screen_name)
 
 
-
-tidy <- leaders_2021 %>% 
-  unnest_tokens(hashtags, token = "tweets")
-
-
+tweets %>% 
+  arrange(-favorite_count) %>%
+  top_n(5, favorite_count) %>% 
+  select(created_at, screen_name, text, favorite_count)
 
 
 
