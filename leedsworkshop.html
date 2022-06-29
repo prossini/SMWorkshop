@@ -449,50 +449,28 @@ the four accounts.<br />
 The first step is to inspect our data by looking at the column
 names:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(leaders)</span></code></pre></div>
-<pre><code>##  [1] &quot;user_id&quot;                 &quot;status_id&quot;              
-##  [3] &quot;created_at&quot;              &quot;screen_name&quot;            
-##  [5] &quot;text&quot;                    &quot;source&quot;                 
-##  [7] &quot;display_text_width&quot;      &quot;reply_to_status_id&quot;     
-##  [9] &quot;reply_to_user_id&quot;        &quot;reply_to_screen_name&quot;   
-## [11] &quot;is_quote&quot;                &quot;is_retweet&quot;             
-## [13] &quot;favorite_count&quot;          &quot;retweet_count&quot;          
-## [15] &quot;quote_count&quot;             &quot;reply_count&quot;            
-## [17] &quot;hashtags&quot;                &quot;symbols&quot;                
-## [19] &quot;urls_url&quot;                &quot;urls_t.co&quot;              
-## [21] &quot;urls_expanded_url&quot;       &quot;media_url&quot;              
-## [23] &quot;media_t.co&quot;              &quot;media_expanded_url&quot;     
-## [25] &quot;media_type&quot;              &quot;ext_media_url&quot;          
-## [27] &quot;ext_media_t.co&quot;          &quot;ext_media_expanded_url&quot; 
-## [29] &quot;ext_media_type&quot;          &quot;mentions_user_id&quot;       
-## [31] &quot;mentions_screen_name&quot;    &quot;lang&quot;                   
-## [33] &quot;quoted_status_id&quot;        &quot;quoted_text&quot;            
-## [35] &quot;quoted_created_at&quot;       &quot;quoted_source&quot;          
-## [37] &quot;quoted_favorite_count&quot;   &quot;quoted_retweet_count&quot;   
-## [39] &quot;quoted_user_id&quot;          &quot;quoted_screen_name&quot;     
-## [41] &quot;quoted_name&quot;             &quot;quoted_followers_count&quot; 
-## [43] &quot;quoted_friends_count&quot;    &quot;quoted_statuses_count&quot;  
-## [45] &quot;quoted_location&quot;         &quot;quoted_description&quot;     
-## [47] &quot;quoted_verified&quot;         &quot;retweet_status_id&quot;      
-## [49] &quot;retweet_text&quot;            &quot;retweet_created_at&quot;     
-## [51] &quot;retweet_source&quot;          &quot;retweet_favorite_count&quot; 
-## [53] &quot;retweet_retweet_count&quot;   &quot;retweet_user_id&quot;        
-## [55] &quot;retweet_screen_name&quot;     &quot;retweet_name&quot;           
-## [57] &quot;retweet_followers_count&quot; &quot;retweet_friends_count&quot;  
-## [59] &quot;retweet_statuses_count&quot;  &quot;retweet_location&quot;       
-## [61] &quot;retweet_description&quot;     &quot;retweet_verified&quot;       
-## [63] &quot;place_url&quot;               &quot;place_name&quot;             
-## [65] &quot;place_full_name&quot;         &quot;place_type&quot;             
-## [67] &quot;country&quot;                 &quot;country_code&quot;           
-## [69] &quot;geo_coords&quot;              &quot;coords_coords&quot;          
-## [71] &quot;bbox_coords&quot;             &quot;status_url&quot;             
-## [73] &quot;name&quot;                    &quot;location&quot;               
-## [75] &quot;description&quot;             &quot;url&quot;                    
-## [77] &quot;protected&quot;               &quot;followers_count&quot;        
-## [79] &quot;friends_count&quot;           &quot;listed_count&quot;           
-## [81] &quot;statuses_count&quot;          &quot;favourites_count&quot;       
-## [83] &quot;account_created_at&quot;      &quot;verified&quot;               
-## [85] &quot;profile_url&quot;             &quot;profile_expanded_url&quot;   
-## [87] &quot;account_lang&quot;            &quot;profile_banner_url&quot;     
+<pre><code>##  [1] &quot;user_id&quot;                 &quot;status_id&quot;               &quot;created_at&quot;              &quot;screen_name&quot;            
+##  [5] &quot;text&quot;                    &quot;source&quot;                  &quot;display_text_width&quot;      &quot;reply_to_status_id&quot;     
+##  [9] &quot;reply_to_user_id&quot;        &quot;reply_to_screen_name&quot;    &quot;is_quote&quot;                &quot;is_retweet&quot;             
+## [13] &quot;favorite_count&quot;          &quot;retweet_count&quot;           &quot;quote_count&quot;             &quot;reply_count&quot;            
+## [17] &quot;hashtags&quot;                &quot;symbols&quot;                 &quot;urls_url&quot;                &quot;urls_t.co&quot;              
+## [21] &quot;urls_expanded_url&quot;       &quot;media_url&quot;               &quot;media_t.co&quot;              &quot;media_expanded_url&quot;     
+## [25] &quot;media_type&quot;              &quot;ext_media_url&quot;           &quot;ext_media_t.co&quot;          &quot;ext_media_expanded_url&quot; 
+## [29] &quot;ext_media_type&quot;          &quot;mentions_user_id&quot;        &quot;mentions_screen_name&quot;    &quot;lang&quot;                   
+## [33] &quot;quoted_status_id&quot;        &quot;quoted_text&quot;             &quot;quoted_created_at&quot;       &quot;quoted_source&quot;          
+## [37] &quot;quoted_favorite_count&quot;   &quot;quoted_retweet_count&quot;    &quot;quoted_user_id&quot;          &quot;quoted_screen_name&quot;     
+## [41] &quot;quoted_name&quot;             &quot;quoted_followers_count&quot;  &quot;quoted_friends_count&quot;    &quot;quoted_statuses_count&quot;  
+## [45] &quot;quoted_location&quot;         &quot;quoted_description&quot;      &quot;quoted_verified&quot;         &quot;retweet_status_id&quot;      
+## [49] &quot;retweet_text&quot;            &quot;retweet_created_at&quot;      &quot;retweet_source&quot;          &quot;retweet_favorite_count&quot; 
+## [53] &quot;retweet_retweet_count&quot;   &quot;retweet_user_id&quot;         &quot;retweet_screen_name&quot;     &quot;retweet_name&quot;           
+## [57] &quot;retweet_followers_count&quot; &quot;retweet_friends_count&quot;   &quot;retweet_statuses_count&quot;  &quot;retweet_location&quot;       
+## [61] &quot;retweet_description&quot;     &quot;retweet_verified&quot;        &quot;place_url&quot;               &quot;place_name&quot;             
+## [65] &quot;place_full_name&quot;         &quot;place_type&quot;              &quot;country&quot;                 &quot;country_code&quot;           
+## [69] &quot;geo_coords&quot;              &quot;coords_coords&quot;           &quot;bbox_coords&quot;             &quot;status_url&quot;             
+## [73] &quot;name&quot;                    &quot;location&quot;                &quot;description&quot;             &quot;url&quot;                    
+## [77] &quot;protected&quot;               &quot;followers_count&quot;         &quot;friends_count&quot;           &quot;listed_count&quot;           
+## [81] &quot;statuses_count&quot;          &quot;favourites_count&quot;        &quot;account_created_at&quot;      &quot;verified&quot;               
+## [85] &quot;profile_url&quot;             &quot;profile_expanded_url&quot;    &quot;account_lang&quot;            &quot;profile_banner_url&quot;     
 ## [89] &quot;profile_background_url&quot;  &quot;profile_image_url&quot;</code></pre>
 <p>With this command, we can see the different columns in our dataframe.
 We have engagement data (e.g. likes, retweets), data about devices used
