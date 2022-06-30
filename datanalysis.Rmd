@@ -253,6 +253,8 @@ hashtag <- subset(leaders_2021, !is.na(hashtags)) # removes tweets without hasht
 
 ```
 
+If you want to recode multiple variables, take a look at the documentation for the dplyr function 'case_when', which allows multiple statements. You can read any documentation using rStudio's 'help' tab, and there are typically many examples for each function.  
+
 
 
 # Don't forget!
@@ -264,3 +266,5 @@ Additional resources:
 
 - [Textual Analysis](https://www.tidytextmining.com/)
 - [Network Analysis](https://rpubs.com/ben_bellman/rtweet_tidygraph)
+
+Happy learning!

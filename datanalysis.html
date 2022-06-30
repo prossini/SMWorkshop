@@ -453,7 +453,8 @@ use pipes again to calculate percentages before creating the plot:</p>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(screen_name, is_retweet) <span class="sc">%&gt;%</span> <span class="co"># we are using this to make sure the data is grouped to calculate proportions</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span><span class="sc">*</span>n<span class="sc">/</span><span class="fu">sum</span>(n)) </span></code></pre></div>
-<pre><code>## `summarise()` has grouped output by &#39;screen_name&#39;. You can override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;screen_name&#39;. You can override using the
+## `.groups` argument.</code></pre>
 <pre><code>## # A tibble: 4 × 4
 ## # Groups:   screen_name [2]
 ##   screen_name  is_retweet     n  perc
@@ -468,7 +469,8 @@ use pipes again to calculate percentages before creating the plot:</p>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(screen_name, is_retweet) <span class="sc">%&gt;%</span> <span class="co"># we are using this to make sure the data is grouped to calculate proportions</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span><span class="sc">*</span>n<span class="sc">/</span><span class="fu">sum</span>(n)) </span></code></pre></div>
-<pre><code>## `summarise()` has grouped output by &#39;screen_name&#39;. You can override using the `.groups` argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;screen_name&#39;. You can override using the
+## `.groups` argument.</code></pre>
 <p>Now that we learned how to calculate percentages using two variables,
 let’s incorporate them in the plot with another pipe:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>leaders_2021 <span class="sc">%&gt;%</span> </span>
@@ -582,6 +584,10 @@ useful to you:</p>
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co"># subset data based on conditions</span></span>
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>unpopular <span class="ot">&lt;-</span> <span class="fu">subset</span>(leaders_2021, favorite_count <span class="sc">&lt;=</span> <span class="dv">500</span>) <span class="co"># select tweets with fewer than 500 likes</span></span>
 <span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>hashtag <span class="ot">&lt;-</span> <span class="fu">subset</span>(leaders_2021, <span class="sc">!</span><span class="fu">is.na</span>(hashtags)) <span class="co"># removes tweets without hashtags</span></span></code></pre></div>
+<p>If you want to recode multiple variables, take a look at the
+documentation for the dplyr function ‘case_when’, which allows multiple
+statements. You can read any documentation using rStudio’s ‘help’ tab,
+and there are typically many examples for each function.</p>
 </div>
 </div>
 <div id="dont-forget" class="section level1">
@@ -599,6 +605,7 @@ for RTweet</a></p>
 <li><a href="https://rpubs.com/ben_bellman/rtweet_tidygraph">Network
 Analysis</a></li>
 </ul>
+<p>Happy learning!</p>
 </div>
 
 
